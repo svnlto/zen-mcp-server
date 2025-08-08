@@ -23,8 +23,16 @@ We maintain high code quality standards. **All contributions must pass our autom
 
 #### Required Code Quality Checks
 
-Before submitting any PR, run our automated quality check script:
+**Option 1 - Automated (Recommended):**
+```bash
+# Install pre-commit hooks (one-time setup)
+pre-commit install
 
+# Now linting runs automatically on every commit
+# Includes: ruff (with auto-fix), black, isort
+```
+
+**Option 2 - Manual:**
 ```bash
 # Run the comprehensive quality checks script
 ./code_quality_checks.sh
