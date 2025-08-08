@@ -6,12 +6,7 @@ import threading
 import time
 from typing import Optional
 
-from .base import (
-    ModelCapabilities,
-    ModelResponse,
-    ProviderType,
-    create_temperature_constraint,
-)
+from .base import ModelCapabilities, ModelResponse, ProviderType, create_temperature_constraint
 from .openai_compatible import OpenAICompatibleProvider
 
 logger = logging.getLogger(__name__)
@@ -501,7 +496,7 @@ class DIALModelProvider(OpenAICompatibleProvider):
                 if attempt < self.MAX_RETRIES - 1:
                     delay = self.RETRY_DELAYS[attempt]
                     logger.info(
-                        f"DIAL API error (attempt {attempt + 1}/{self.MAX_RETRIES}), " f"retrying in {delay}s: {str(e)}"
+                        f"DIAL API error (attempt {attempt + 1}/{self.MAX_RETRIES}), retrying in {delay}s: {str(e)}"
                     )
                     time.sleep(delay)
                     continue
