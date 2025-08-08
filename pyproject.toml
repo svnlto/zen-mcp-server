@@ -1,6 +1,6 @@
 [project]
 name = "zen-mcp-server"
-version = "1.0.0"
+version = "0.1.0"
 description = "AI-powered MCP server with multiple model providers"
 requires-python = ">=3.9"
 dependencies = [
@@ -85,13 +85,20 @@ ignore = [
 
 [tool.semantic_release]
 version_toml = ["pyproject.toml:project.version"]
+version_variables = []
 branch = "main"
-changelog_file = "CHANGELOG.md"
 build_command = "python -m pip install --upgrade build && python -m build"
 dist_path = "dist/"
 upload_to_vcs_release = true
+upload_to_repository = false
+remove_dist = false
+commit_version_number = true
 
-[tool.semantic_release.changelog.default_templates]
+[tool.semantic_release.branches.main]
+match = "main"
+prerelease = false
+
+[tool.semantic_release.changelog]
 changelog_file = "CHANGELOG.md"
 exclude_commit_patterns = []
 
