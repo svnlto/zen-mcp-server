@@ -45,7 +45,8 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          semantic-release
+          semantic-release version
+          semantic-release publish
 
       - name: Upload build artifacts to release
         if: hashFiles('dist/*') != ''
