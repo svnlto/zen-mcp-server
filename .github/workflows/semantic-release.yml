@@ -44,5 +44,17 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          semantic-release version --skip-build
+          semantic-release version
           semantic-release publish
+
+      - name: Upload build artifacts to release
+        if: hashFiles('dist/*') != ''
+        run: |
+          # Get the latest release tag
+          LATEST_TAG=$(gh release list --limit 1 --json tagName --jq '.[0].tagName')
+          if [ ! -z "$LATEST_TAG" ]; then
+            echo "Uploading artifacts to release $LATEST_TAG"
+            gh release upload "$LATEST_TAG" dist/* --clobber
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
