@@ -8,6 +8,8 @@ The server follows the MCP specification to expose various AI tools as callable 
 that can be used by MCP clients (like Claude). Each tool provides specialized functionality
 such as code review, debugging, deep thinking, and general chat capabilities.
 
+Version: Updated with Docker workflow permission fixes
+
 Key Components:
 - MCP Server: Handles protocol communication and tool discovery
 - Tool Registry: Maps tool names to their implementations
