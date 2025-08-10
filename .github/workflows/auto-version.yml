@@ -13,10 +13,7 @@ on:
       - 'server.py'
       - 'config.py'
 
-permissions:
-  contents: read
-  packages: write
-  pull-requests: write
+permissions: write-all
 
 jobs:
   docker:

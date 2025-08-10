@@ -10,9 +10,7 @@ on:
         required: false
         type: string
 
-permissions:
-  contents: read
-  packages: write
+permissions: write-all
 
 jobs:
   docker:
