@@ -34,6 +34,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Login to GitHub Container Registry
+        if: github.event.pull_request.head.repo.full_name == github.repository
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -49,7 +50,8 @@ jobs:
             type=raw,value=pr-${{ github.event.number }}-${{ github.sha }}
             type=raw,value=pr-${{ github.event.number }}
 
-      - name: Build and push Docker image
+      - name: Build and push Docker image (internal PRs)
+        if: github.event.pull_request.head.repo.full_name == github.repository
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -60,7 +62,20 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Add Docker build comment
+      - name: Build Docker image (fork PRs)
+        if: github.event.pull_request.head.repo.full_name != github.repository
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: false
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Add Docker build comment (internal PRs)
+        if: github.event.pull_request.head.repo.full_name == github.repository
         uses: marocchino/sticky-pull-request-comment@d2ad0de260ae8b0235ce059e63f2949ba9e05943 # v2.9.3
         with:
           header: docker-build
@@ -90,7 +105,24 @@ jobs:
             
             💡 Add `docker-build` label to manually trigger builds
 
-      - name: Update job summary
+      - name: Add Docker build comment (fork PRs)
+        if: github.event.pull_request.head.repo.full_name != github.repository
+        uses: marocchino/sticky-pull-request-comment@d2ad0de260ae8b0235ce059e63f2949ba9e05943 # v2.9.3
+        with:
+          header: docker-build
+          message: |
+            ## 🐳 Docker Build Complete (Build Only)
+            
+            **PR**: #${{ github.event.number }} | **Commit**: `${{ github.sha }}`
+            
+            ✅ **Docker build successful** - Multi-platform image built and tested
+            
+            **Note**: Fork PRs only build (no push) for security. Images will be available once PR is merged.
+            
+            💡 Add `docker-build` label to manually trigger builds
+
+      - name: Update job summary (internal PRs)
+        if: github.event.pull_request.head.repo.full_name == github.repository
         run: |
           {
             echo "## 🐳 Docker Build Complete"
@@ -98,4 +130,14 @@ jobs:
             echo '```'
             echo "${{ steps.meta.outputs.tags }}"
             echo '```'
+          } >> $GITHUB_STEP_SUMMARY
+
+      - name: Update job summary (fork PRs)
+        if: github.event.pull_request.head.repo.full_name != github.repository
+        run: |
+          {
+            echo "## 🐳 Docker Build Complete (Build Only)"
+            echo "**PR**: #${{ github.event.number }} | **Commit**: ${{ github.sha }}"
+            echo "✅ Multi-platform Docker build successful"
+            echo "Note: Fork PRs only build (no push) for security"
           } >> $GITHUB_STEP_SUMMARY
