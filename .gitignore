@@ -184,3 +184,8 @@ CLAUDE.local.md
 logs/
 *.backup
 /.desktop_configured
+
+# Nix development environment
+.nix-venv/
+.direnv/
+result
