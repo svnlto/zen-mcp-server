@@ -32,14 +32,27 @@
 
       devShells.default = pkgs.mkShell {
         packages = [ 
-          python 
-          (python.withPackages (ps: with ps; [
-            # runtime deps
-            mcp google-genai openai pydantic python-dotenv
-            # dev deps  
-            pytest pytest-asyncio black ruff isort
-          ]))
-        ];
+          python
+          python.pkgs.pip
+          python.pkgs.virtualenv
+          # Basic tools
+          pkgs.git
+        ] ++ (with python.pkgs; [
+          # Only basic packages from nixpkgs
+          pytest black ruff isort setuptools wheel
+        ]);
+        
+        shellHook = ''
+          if [ ! -d ".nix-venv" ]; then
+            echo "Setting up Python environment..."
+            python -m venv .nix-venv --quiet
+            source .nix-venv/bin/activate
+            pip install -q --upgrade pip
+            pip install -q mcp google-genai openai pydantic python-dotenv pytest-asyncio
+            deactivate
+          fi
+          source .nix-venv/bin/activate
+        '';
         
         # Ensure proper shared library paths
         LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
