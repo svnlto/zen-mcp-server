@@ -31,12 +31,20 @@
       };
 
       devShells.default = pkgs.mkShell {
-        packages = [ python (python.withPackages (ps: with ps; [
-          # runtime deps
-          mcp google-genai openai pydantic python-dotenv
-          # dev deps
-          pytest black ruff isort
-        ])) ];
+        packages = [ 
+          python 
+          (python.withPackages (ps: with ps; [
+            # runtime deps
+            mcp google-genai openai pydantic python-dotenv
+            # dev deps  
+            pytest pytest-asyncio black ruff isort
+          ]))
+        ];
+        
+        # Ensure proper shared library paths
+        LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
+          pkgs.stdenv.cc.cc.lib
+        ];
       };
     });
 }
