@@ -36,7 +36,7 @@ Thank you for your interest in contributing to Zen MCP Server! This guide will h
 The Nix flake provides several advantages for development:
 
 - **Reproducible Environment**: Identical dependencies across all systems
-- **Zero Setup**: No need to install Python, pip, or manage virtual environments  
+- **Zero Setup**: No need to install Python, pip, or manage virtual environments
 - **Isolated Dependencies**: No conflicts with system packages
 - **Cross-Platform**: Works on Linux, macOS, and NixOS
 

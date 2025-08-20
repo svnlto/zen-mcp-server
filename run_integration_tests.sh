@@ -12,7 +12,7 @@ echo "These tests use real API calls with your configured keys"
 echo ""
 
 # Activate virtual environment (skip if in Nix environment)
-if [[ -n "$NIX_BUILD_TOP" ]] || [[ "$IN_NIX_SHELL" == "1" ]]; then
+if [[ -n "$NIX_BUILD_TOP" ]] || [[ -n "$IN_NIX_SHELL" ]]; then
     echo "✅ Using Nix development environment"
 elif [[ -f ".zen_venv/bin/activate" ]]; then
     source .zen_venv/bin/activate
