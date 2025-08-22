@@ -34,70 +34,34 @@ logger = logging.getLogger(__name__)
 # Tool-specific field descriptions for precommit workflow
 PRECOMMIT_WORKFLOW_FIELD_DESCRIPTIONS = {
     "step": (
-        "Describe what you're currently investigating for pre-commit validation by thinking deeply about the changes "
-        "and their potential impact. In step 1, clearly state your investigation plan and begin forming a systematic "
-        "approach after thinking carefully about what needs to be validated. CRITICAL: Remember to thoroughly examine "
-        "all git repositories, staged/unstaged changes, and understand the scope and intent of modifications. "
-        "Consider not only immediate correctness but also potential future consequences, security implications, "
-        "performance impacts, and maintainability concerns. Map out changed files, understand the business logic, "
-        "and identify areas requiring deeper analysis. In all later steps, continue exploring with precision: "
-        "trace dependencies, verify hypotheses, and adapt your understanding as you uncover more evidence."
-        "IMPORTANT: When referring to code, use the relevant_files parameter to pass relevant files and only use the prompt to refer to "
-        "function / method names or very small code snippets if absolutely necessary to explain the issue. Do NOT "
-        "pass large code snippets in the prompt as this is exclusively reserved for descriptive text only. "
+        "Describe current pre-commit validation investigation. Step 1: State investigation plan and examine git changes. "
+        "Consider correctness, security, performance, maintainability. Map changed files, understand scope. "
+        "Later steps: trace dependencies, verify hypotheses. Reference files via relevant_files, not in text."
     ),
-    "step_number": (
-        "The index of the current step in the pre-commit investigation sequence, beginning at 1. Each step should "
-        "build upon or revise the previous one."
-    ),
+    "step_number": "Current step index, starting at 1. Each step builds on previous.",
     "total_steps": (
-        "Your current estimate for how many steps will be needed to complete the pre-commit investigation. "
-        "Adjust as new findings emerge. IMPORTANT: When continuation_id is provided (continuing a previous "
-        "conversation), set this to 1 as we're not starting a new multi-step investigation."
+        "Estimated steps to complete pre-commit investigation. Adjust as needed. When continuing a conversation, adjust workflow accordingly."
     ),
     "next_step_required": (
-        "Set to true if you plan to continue the investigation with another step. False means you believe the "
-        "pre-commit analysis is complete and ready for expert validation. IMPORTANT: When continuation_id is "
-        "provided (continuing a previous conversation), set this to False to immediately proceed with expert analysis."
+        "True to continue investigation, False when pre-commit analysis complete. When continuing a conversation, adjust workflow accordingly."
     ),
     "findings": (
-        "Summarize everything discovered in this step about the changes being committed. Include analysis of git diffs, "
-        "file modifications, new functionality, potential issues identified, code quality observations, and security "
-        "considerations. Be specific and avoid vague language—document what you now know about the changes and how "
-        "they affect your assessment. IMPORTANT: Document both positive findings (good patterns, proper implementations) "
-        "and concerns (potential bugs, missing tests, security risks). In later steps, confirm or update past findings "
-        "with additional evidence."
+        "Summarize discoveries about changes: git diffs, modifications, issues, code quality, security. "
+        "Document positive findings and concerns. Be specific, update in later steps."
     ),
-    "files_checked": (
-        "List all files (as absolute paths, do not clip or shrink file names) examined during the pre-commit "
-        "investigation so far. Include even files ruled out or found to be unchanged, as this tracks your "
-        "exploration path."
-    ),
-    "relevant_files": (
-        "Subset of files_checked (as full absolute paths) that contain changes or are directly relevant to the "
-        "commit validation. Only list those that are directly tied to the changes being committed, their dependencies, "
-        "or files that need validation. This could include modified files, related configuration, tests, or "
-        "documentation."
-    ),
+    "files_checked": "All files examined during pre-commit investigation. Use full absolute paths, do not shorten.",
+    "relevant_files": ("Files with changes or relevant to commit validation. Use full absolute paths, do not shorten."),
     "relevant_context": (
         "List methods, functions, classes, or modules that are central to the changes being committed, in the format "
         "'ClassName.methodName', 'functionName', or 'module.ClassName'. Prioritize those that are modified, added, "
         "or significantly affected by the changes."
     ),
     "issues_found": (
-        "List of issues identified during the investigation. Each issue should be a dictionary with 'severity' "
-        "(critical, high, medium, low) and 'description' fields. Include potential bugs, security concerns, "
-        "performance issues, missing tests, incomplete implementations, etc."
+        "Issues identified: dict with 'severity' (critical/high/medium/low) and 'description'. Include bugs, security, performance, tests."
     ),
     "confidence": (
-        "Indicate your current confidence in the assessment. Use: 'exploring' (starting analysis), 'low' (early "
-        "investigation), 'medium' (some evidence gathered), 'high' (strong evidence), "
-        "'very_high' (very strong evidence), 'almost_certain' (nearly complete validation), 'certain' (200% confidence - "
-        "analysis is complete and all issues are identified with no need for external model validation). "
-        "Do NOT use 'certain' unless the pre-commit validation is thoroughly complete, use 'very_high' or 'almost_certain' "
-        "instead if not 200% sure. "
-        "Using 'certain' means you have complete confidence locally and prevents external model validation. Also "
-        "do NOT set confidence to 'certain' if the user has strongly requested that external validation MUST be performed."
+        "Assessment confidence: 'exploring' (starting), 'low' (early), 'medium' (some evidence), "
+        "'high' (strong evidence), 'very_high', 'almost_certain', 'certain' (complete validation)."
     ),
     "backtrack_from_step": (
         "If an earlier finding or assessment needs to be revised or discarded, specify the step number from which to "
@@ -111,10 +75,7 @@ PRECOMMIT_WORKFLOW_FIELD_DESCRIPTIONS = {
         "Starting absolute path to the directory to search for git repositories (must be FULL absolute paths - "
         "DO NOT SHORTEN)."
     ),
-    "compare_to": (
-        "Optional: A git ref (branch, tag, commit hash) to compare against. Check remote branches if local does not exist."
-        "If not provided, investigates local staged and unstaged changes."
-    ),
+    "compare_to": "Optional git ref to compare against. If not provided, investigates staged/unstaged changes.",
     "include_staged": "Include staged changes in the investigation. Only applies if 'compare_to' is not set.",
     "include_unstaged": "Include uncommitted (unstaged) changes in the investigation. Only applies if 'compare_to' is not set.",
     "focus_on": "Specific aspects to focus on (e.g., 'security implications', 'performance impact', 'test coverage').",

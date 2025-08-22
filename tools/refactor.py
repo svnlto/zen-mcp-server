@@ -35,50 +35,20 @@ logger = logging.getLogger(__name__)
 # Tool-specific field descriptions for refactor tool
 REFACTOR_FIELD_DESCRIPTIONS = {
     "step": (
-        "Describe what you're currently investigating for refactoring by thinking deeply about the code structure, "
-        "patterns, and potential improvements. In step 1, clearly state your refactoring investigation plan and begin "
-        "forming a systematic approach after thinking carefully about what needs to be analyzed. CRITICAL: Remember to "
-        "thoroughly examine code quality, performance implications, maintainability concerns, and architectural patterns. "
-        "Consider not only obvious code smells and issues but also opportunities for decomposition, modernization, "
-        "organization improvements, and ways to reduce complexity while maintaining functionality. Map out the codebase "
-        "structure, understand the business logic, and identify areas requiring refactoring. In all later steps, continue "
-        "exploring with precision: trace dependencies, verify assumptions, and adapt your understanding as you uncover "
-        "more refactoring opportunities."
-        "IMPORTANT: When referring to code, use the relevant_files parameter to pass relevant files and only use the prompt to refer to "
-        "function / method names or very small code snippets if absolutely necessary to explain the issue. Do NOT "
-        "pass large code snippets in the prompt as this is exclusively reserved for descriptive text only. "
+        "Describe current refactoring investigation. Step 1: State refactoring plan and pass files via relevant_files. "
+        "Examine code quality, performance, maintainability, architecture. Consider smells, decomposition, modernization. "
+        "Later steps: trace dependencies, verify assumptions. Reference files via relevant_files, not in text descriptions."
     ),
-    "step_number": (
-        "The index of the current step in the refactoring investigation sequence, beginning at 1. Each step should "
-        "build upon or revise the previous one."
-    ),
-    "total_steps": (
-        "Your current estimate for how many steps will be needed to complete the refactoring investigation. "
-        "Adjust as new opportunities emerge."
-    ),
-    "next_step_required": (
-        "Set to true if you plan to continue the investigation with another step. False means you believe the "
-        "refactoring analysis is complete and ready for expert validation."
-    ),
+    "step_number": "Current step index, starting at 1. Each step builds on previous.",
+    "total_steps": "Estimated steps to complete refactoring investigation. Adjust as needed.",
+    "next_step_required": "True to continue investigation, False when refactoring analysis is complete.",
     "findings": (
-        "Summarize everything discovered in this step about refactoring opportunities in the code. Include analysis of "
-        "code smells, decomposition opportunities, modernization possibilities, organization improvements, architectural "
-        "patterns, design decisions, potential performance optimizations, and maintainability enhancements. Be specific "
-        "and avoid vague language—document what you now know about the code and how it could be improved. IMPORTANT: "
-        "Document both positive aspects (good patterns, well-designed components) and improvement opportunities "
-        "(code smells, overly complex functions, outdated patterns, organization issues). In later steps, confirm or "
-        "update past findings with additional evidence."
+        "Summarize refactoring opportunities: code smells, decomposition, modernization, organization, performance. "
+        "Document positive aspects and improvements. Be specific, update in later steps."
     ),
-    "files_checked": (
-        "List all files (as absolute paths, do not clip or shrink file names) examined during the refactoring "
-        "investigation so far. Include even files ruled out or found to need no refactoring, as this tracks your "
-        "exploration path."
-    ),
+    "files_checked": "All files examined during refactoring investigation. Use full absolute paths, do not shorten.",
     "relevant_files": (
-        "Subset of files_checked (as full absolute paths) that contain code requiring refactoring or are directly "
-        "relevant to the refactoring opportunities identified. Only list those that are directly tied to specific "
-        "refactoring opportunities, code smells, decomposition needs, or improvement areas. This could include files "
-        "with code smells, overly large functions/classes, outdated patterns, or organization issues."
+        "Files requiring refactoring or with identified opportunities. Use full absolute paths, do not shorten."
     ),
     "relevant_context": (
         "List methods, functions, classes, or modules that are central to the refactoring opportunities identified, "
@@ -86,21 +56,11 @@ REFACTOR_FIELD_DESCRIPTIONS = {
         "code smells, need decomposition, could benefit from modernization, or require organization improvements."
     ),
     "issues_found": (
-        "List of refactoring opportunities identified during the investigation. Each opportunity should be a dictionary "
-        "with 'severity' (critical, high, medium, low), 'type' (codesmells, decompose, modernize, organization), and "
-        "'description' fields. Include code smells, decomposition opportunities, modernization possibilities, "
-        "organization improvements, performance optimizations, maintainability enhancements, etc."
+        "Refactoring opportunities: dict with 'severity' (critical/high/medium/low), 'type' (codesmells/decompose/modernize/organization), 'description'."
     ),
     "confidence": (
-        "Indicate your current confidence in the refactoring analysis completeness. Use: 'exploring' (starting "
-        "analysis), 'incomplete' (just started or significant work remaining), 'partial' (some refactoring "
-        "opportunities identified but more analysis needed), 'complete' (comprehensive refactoring analysis "
-        "finished with all major opportunities identified and the CLI agent can handle 100% confidently without help). "
-        "Use 'complete' ONLY when you have fully analyzed all code, identified all significant refactoring "
-        "opportunities, and can provide comprehensive recommendations without expert assistance. When files are "
-        "too large to read fully or analysis is uncertain, use 'partial'. Using 'complete' prevents expert "
-        "analysis to save time and money. Do NOT set confidence to 'certain' if the user has strongly requested that "
-        "external validation MUST be performed."
+        "Analysis completeness: 'exploring' (starting), 'incomplete' (significant work remaining), "
+        "'partial' (some opportunities found), 'complete' (comprehensive analysis finished)."
     ),
     "backtrack_from_step": (
         "If an earlier finding or assessment needs to be revised or discarded, specify the step number from which to "

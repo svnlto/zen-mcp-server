@@ -35,54 +35,24 @@ logger = logging.getLogger(__name__)
 # Tool-specific field descriptions for code review workflow
 CODEREVIEW_WORKFLOW_FIELD_DESCRIPTIONS = {
     "step": (
-        "Describe what you're currently investigating for code review by thinking deeply about the code structure, "
-        "patterns, and potential issues. In step 1, clearly state your review plan and begin forming a systematic "
-        "approach after thinking carefully about what needs to be analyzed. You must begin by passing the file path "
-        "for the initial code you are about to review in relevant_files. CRITICAL: Remember to thoroughly examine "
-        "code quality, security implications, performance concerns, and architectural patterns. Consider not only "
-        "obvious bugs and issues but also subtle concerns like over-engineering, unnecessary complexity, design "
-        "patterns that could be simplified, areas where architecture might not scale well, missing abstractions, "
-        "and ways to reduce complexity while maintaining functionality. Map out the codebase structure, understand "
-        "the business logic, and identify areas requiring deeper analysis. In all later steps, continue exploring "
-        "with precision: trace dependencies, verify assumptions, and adapt your understanding as you uncover more evidence."
-        "IMPORTANT: When referring to code, use the relevant_files parameter to pass relevant files and only use the prompt to refer to "
-        "function / method names or very small code snippets if absolutely necessary to explain the issue. Do NOT "
-        "pass large code snippets in the prompt as this is exclusively reserved for descriptive text only. "
+        "Describe current code review investigation. Step 1: State review plan and pass initial files via relevant_files. "
+        "Examine code quality, security, performance, architecture. Consider complexity, scaling, abstractions. "
+        "Later steps: trace dependencies, verify assumptions. Reference files via relevant_files, not in text descriptions."
     ),
-    "step_number": (
-        "The index of the current step in the code review sequence, beginning at 1. Each step should build upon or "
-        "revise the previous one."
-    ),
+    "step_number": "Current step index, starting at 1. Each step builds on previous.",
     "total_steps": (
-        "Your current estimate for how many steps will be needed to complete the code review. "
-        "Adjust as new findings emerge. MANDATORY: When continuation_id is provided (continuing a previous "
-        "conversation), set this to 1 as we're not starting a new multi-step investigation."
+        "Estimated steps to complete review. Adjust as needed. When continuing a conversation, adjust workflow accordingly."
     ),
     "next_step_required": (
-        "Set to true if you plan to continue the investigation with another step. False means you believe the "
-        "code review analysis is complete and ready for expert validation. MANDATORY: When continuation_id is "
-        "provided (continuing a previous conversation), set this to False to immediately proceed with expert analysis."
+        "True to continue investigation, False when complete. When continuing a conversation, adjust workflow accordingly."
     ),
     "findings": (
-        "Summarize everything discovered in this step about the code being reviewed. Include analysis of code quality, "
-        "security concerns, performance issues, architectural patterns, design decisions, potential bugs, code smells, "
-        "and maintainability considerations. Be specific and avoid vague language—document what you now know about "
-        "the code and how it affects your assessment. IMPORTANT: Document both positive findings (good patterns, "
-        "proper implementations, well-designed components) and concerns (potential issues, anti-patterns, security "
-        "risks, performance bottlenecks). In later steps, confirm or update past findings with additional evidence."
+        "Summarize discoveries: code quality, security, performance, architecture, bugs, patterns. "
+        "Document both positive findings and concerns. Be specific, update in later steps."
     ),
-    "files_checked": (
-        "List all files (as absolute paths, do not clip or shrink file names) examined during the code review "
-        "investigation so far. Include even files ruled out or found to be unrelated, as this tracks your "
-        "exploration path."
-    ),
+    "files_checked": "All files examined during review. Use full absolute paths, do not shorten.",
     "relevant_files": (
-        "For when this is the first step, please pass absolute file paths of relevant code to review (do not clip "
-        "file paths). When used for the final step, this contains a subset of files_checked (as full absolute paths) "
-        "that contain code directly relevant to the review or contain significant issues, patterns, or examples worth "
-        "highlighting. Only list those that are directly tied to important findings, security concerns, performance "
-        "issues, or architectural decisions. This could include core implementation files, configuration files, or "
-        "files with notable patterns."
+        "Step 1: code files to review. Final step: files with key findings/issues. Use full absolute paths, do not shorten."
     ),
     "relevant_context": (
         "List methods, functions, classes, or modules that are central to the code review findings, in the format "
@@ -90,20 +60,12 @@ CODEREVIEW_WORKFLOW_FIELD_DESCRIPTIONS = {
         "demonstrate patterns, show security concerns, or represent key architectural decisions."
     ),
     "issues_found": (
-        "List of issues identified during the investigation. Each issue should be a dictionary with 'severity' "
-        "(critical, high, medium, low) and 'description' fields. Include security vulnerabilities, performance "
-        "bottlenecks, code quality issues, architectural concerns, maintainability problems, over-engineering, "
-        "unnecessary complexity, etc."
+        "Issues identified: dict with 'severity' (critical/high/medium/low) and 'description'. "
+        "Include security, performance, quality, architecture issues."
     ),
     "confidence": (
-        "Indicate your current confidence in the assessment. Use: 'exploring' (starting analysis), 'low' (early "
-        "investigation), 'medium' (some evidence gathered), 'high' (strong evidence), "
-        "'very_high' (very strong evidence), 'almost_certain' (nearly complete validation), 'certain' (200% confidence - "
-        "analysis is complete and all issues are identified with no need for external model validation). "
-        "Do NOT use 'certain' unless the pre-commit validation is thoroughly complete, use 'very_high' or 'almost_certain' "
-        "instead if not 200% sure. "
-        "Using 'certain' means you have complete confidence locally and prevents external model validation. Also "
-        "do NOT set confidence to 'certain' if the user has strongly requested that external validation MUST be performed."
+        "Assessment confidence: 'exploring' (starting), 'low' (early), 'medium' (some evidence), "
+        "'high' (strong evidence), 'very_high' (comprehensive analysis), 'almost_certain', 'certain' (complete)."
     ),
     "backtrack_from_step": (
         "If an earlier finding or assessment needs to be revised or discarded, specify the step number from which to "

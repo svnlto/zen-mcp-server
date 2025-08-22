@@ -35,44 +35,20 @@ logger = logging.getLogger(__name__)
 # Tool-specific field descriptions for analyze workflow
 ANALYZE_WORKFLOW_FIELD_DESCRIPTIONS = {
     "step": (
-        "What to analyze or look for in this step. In step 1, describe what you want to analyze and begin forming "
-        "an analytical approach after thinking carefully about what needs to be examined. Consider code quality, "
-        "performance implications, architectural patterns, and design decisions. Map out the codebase structure, "
-        "understand the business logic, and identify areas requiring deeper analysis. In later steps, continue "
-        "exploring with precision and adapt your understanding as you uncover more insights."
+        "Describe what to analyze in this step. Step 1: State analysis goals and approach. "
+        "Consider code quality, performance, architecture, design. Map codebase structure. "
+        "Later steps: explore with precision, adapt understanding."
     ),
-    "step_number": (
-        "The index of the current step in the analysis sequence, beginning at 1. Each step should build upon or "
-        "revise the previous one."
-    ),
-    "total_steps": (
-        "Your current estimate for how many steps will be needed to complete the analysis. "
-        "Adjust as new findings emerge."
-    ),
-    "next_step_required": (
-        "Set to true if you plan to continue the investigation with another step. False means you believe the "
-        "analysis is complete and ready for expert validation."
-    ),
+    "step_number": "Current step index, starting at 1. Each step builds on previous.",
+    "total_steps": "Estimated steps to complete analysis. Adjust as needed.",
+    "next_step_required": "True to continue investigation, False when analysis complete.",
     "findings": (
-        "Summarize everything discovered in this step about the code being analyzed. Include analysis of architectural "
-        "patterns, design decisions, tech stack assessment, scalability characteristics, performance implications, "
-        "maintainability factors, security posture, and strategic improvement opportunities. Be specific and avoid "
-        "vague language—document what you now know about the codebase and how it affects your assessment. "
-        "IMPORTANT: Document both strengths (good patterns, solid architecture, well-designed components) and "
-        "concerns (tech debt, scalability risks, overengineering, unnecessary complexity). In later steps, confirm "
-        "or update past findings with additional evidence."
+        "Summarize analysis discoveries: architecture, design, tech stack, performance, maintainability, security. "
+        "Document strengths and concerns. Be specific, update in later steps."
     ),
-    "files_checked": (
-        "List all files (as absolute paths, do not clip or shrink file names) examined during the analysis "
-        "investigation so far. Include even files ruled out or found to be unrelated, as this tracks your "
-        "exploration path."
-    ),
+    "files_checked": "All files examined during analysis investigation. Use full absolute paths, do not shorten.",
     "relevant_files": (
-        "Subset of files_checked (as full absolute paths) that contain code directly relevant to the analysis or "
-        "contain significant patterns, architectural decisions, or examples worth highlighting. Only list those that are "
-        "directly tied to important findings, architectural insights, performance characteristics, or strategic "
-        "improvement opportunities. This could include core implementation files, configuration files, or files "
-        "demonstrating key patterns."
+        "Files relevant to analysis with significant patterns or insights. Use full absolute paths, do not shorten."
     ),
     "relevant_context": (
         "List methods, functions, classes, or modules that are central to the analysis findings, in the format "
@@ -89,10 +65,7 @@ ANALYZE_WORKFLOW_FIELD_DESCRIPTIONS = {
         "that help with analysis context. Only include if they materially assist understanding or assessment."
     ),
     "confidence": (
-        "Your confidence level in the current analysis findings: exploring (early investigation), "
-        "low (some insights but more needed), medium (solid understanding), high (comprehensive insights), "
-        "very_high (very comprehensive insights), almost_certain (nearly complete analysis), "
-        "certain (100% confidence - complete analysis ready for expert validation)"
+        "Analysis confidence: exploring, low, medium, high, very_high, almost_certain, certain (complete analysis)."
     ),
     "analysis_type": "Type of analysis to perform (architecture, performance, security, quality, general)",
     "output_format": "How to format the output (summary, detailed, actionable)",

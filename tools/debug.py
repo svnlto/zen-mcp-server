@@ -34,74 +34,35 @@ logger = logging.getLogger(__name__)
 # Tool-specific field descriptions matching original debug tool
 DEBUG_INVESTIGATION_FIELD_DESCRIPTIONS = {
     "step": (
-        "Describe what you're currently investigating by thinking deeply about the issue and its possible causes. "
-        "In step 1, clearly state the issue and begin forming an investigative direction after thinking carefully"
-        "about the described problem. Ask further questions from the user if you think these will help with your"
-        "understanding and investigation. CRITICAL: Remember that reported symptoms might originate from code far from "
-        "where they manifest. Also be aware that after thorough investigation, you might find NO BUG EXISTS - it could "
-        "be a misunderstanding or expectation mismatch. Consider not only obvious failures, but also subtle "
-        "contributing factors like upstream logic, invalid inputs, missing preconditions, or hidden side effects. "
-        "Map out the flow of related functions or modules. Identify call paths where input values or branching logic "
-        "could cause instability. In concurrent systems, watch for race conditions, shared state, or timing "
-        "dependencies. In all later steps, continue exploring with precision: trace deeper dependencies, verify "
-        "hypotheses, and adapt your understanding as you uncover more evidence."
-        "IMPORTANT: When referring to code, use the relevant_files parameter to pass relevant files and only use the prompt to refer to "
-        "function / method names or very small code snippets if absolutely necessary to explain the issue. Do NOT "
-        "pass large code snippets in the prompt as this is exclusively reserved for descriptive text only. "
+        "Describe current debugging investigation. Step 1: State issue and investigation plan. "
+        "Consider symptoms may originate elsewhere, no bug exists is valid. Examine logic, inputs, side effects, "
+        "race conditions. Later steps: trace dependencies, verify hypotheses. Reference files via relevant_files, not in text."
     ),
-    "step_number": (
-        "The index of the current step in the investigation sequence, beginning at 1. Each step should build upon or "
-        "revise the previous one."
-    ),
+    "step_number": "Current step index, starting at 1. Each step builds on previous.",
     "total_steps": (
-        "Your current estimate for how many steps will be needed to complete the investigation. "
-        "Adjust as new findings emerge. IMPORTANT: When continuation_id is provided (continuing a previous "
-        "conversation), set this to 1 as we're not starting a new multi-step investigation."
+        "Estimated steps to complete investigation. Adjust as needed. When continuing a conversation, adjust workflow accordingly."
     ),
     "next_step_required": (
-        "Set to true if you plan to continue the investigation with another step. False means you believe the root "
-        "cause is known or the investigation is complete. IMPORTANT: When continuation_id is "
-        "provided (continuing a previous conversation), set this to False to immediately proceed with expert analysis."
+        "True to continue investigation, False when root cause known or complete. When continuing a conversation, adjust workflow accordingly."
     ),
     "findings": (
-        "Summarize everything discovered in this step. Include new clues, unexpected behavior, evidence from code or "
-        "logs, or disproven theories. Be specific and avoid vague language—document what you now know and how it "
-        "affects your hypothesis. IMPORTANT: If you find no evidence supporting the reported issue after thorough "
-        "investigation, document this clearly. Finding 'no bug' is a valid outcome if the "
-        "investigation was comprehensive. "
-        "In later steps, confirm or disprove past findings with reason."
+        "Summarize discoveries: clues, behavior, evidence, disproven theories. Be specific. "
+        "'No bug' is valid if comprehensive. Update findings in later steps."
     ),
-    "files_checked": (
-        "List all files (as absolute paths, do not clip or shrink file names) examined during "
-        "the investigation so far. "
-        "Include even files ruled out, as this tracks your exploration path."
-    ),
-    "relevant_files": (
-        "Subset of files_checked (as full absolute paths) that contain code directly relevant to the issue. Only list "
-        "those that are directly tied to the root cause or its effects. This could include the cause, trigger, or "
-        "place of manifestation."
-    ),
+    "files_checked": "All files examined during investigation. Use full absolute paths, do not shorten.",
+    "relevant_files": ("Files directly relevant to the issue or root cause. Use full absolute paths, do not shorten."),
     "relevant_context": (
         "List methods or functions that are central to the issue, in the format "
         "'ClassName.methodName' or 'functionName'. "
         "Prioritize those that influence or process inputs, drive branching, or pass state between modules."
     ),
     "hypothesis": (
-        "A concrete theory for what's causing the issue based on the evidence so far. This can include suspected "
-        "failures, incorrect assumptions, or violated constraints. VALID HYPOTHESES INCLUDE: 'No bug found - possible "
-        "user misunderstanding' or 'Symptoms appear unrelated to any code issue' if evidence supports this. When "
-        "no bug is found, consider suggesting: 'Recommend discussing with thought partner/engineering assistant for "
-        "clarification of expected behavior.' You are encouraged to revise or abandon hypotheses in later steps as "
-        "needed based on evidence."
+        "Concrete theory for issue cause based on evidence. Can include 'No bug found' if supported. "
+        "Revise as needed based on evidence."
     ),
     "confidence": (
-        "Indicate your current confidence in the hypothesis. Use: 'exploring' (starting out), 'low' (early idea), "
-        "'medium' (some supporting evidence), 'high' (strong evidence), 'very_high' (very strong evidence), "
-        "'almost_certain' (nearly confirmed), 'certain' (200% confidence - root cause and minimal fix are both "
-        "confirmed locally with no need for external model validation). Do NOT use 'certain' unless the issue can be "
-        "fully resolved with a fix, use 'very_high' or 'almost_certain' instead when not 200% sure. Using 'certain' "
-        "means you have ABSOLUTE confidence locally and prevents external model validation. Also do "
-        "NOT set confidence to 'certain' if the user has strongly requested that external validation MUST be performed."
+        "Hypothesis confidence: 'exploring' (starting), 'low' (early idea), 'medium' (some evidence), "
+        "'high' (strong evidence), 'very_high', 'almost_certain', 'certain' (100% confidence, fix confirmed)."
     ),
     "backtrack_from_step": (
         "If an earlier finding or hypothesis needs to be revised or discarded, specify the step number from which to "

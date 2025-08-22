@@ -35,41 +35,20 @@ logger = logging.getLogger(__name__)
 # Tool-specific field descriptions for test generation workflow
 TESTGEN_WORKFLOW_FIELD_DESCRIPTIONS = {
     "step": (
-        "What to analyze or look for in this step. In step 1, describe what you want to test and begin forming an "
-        "analytical approach after thinking carefully about what needs to be examined. Consider code structure, "
-        "business logic, critical paths, edge cases, and potential failure modes. Map out the codebase structure, "
-        "understand the functionality, and identify areas requiring test coverage. In later steps, continue exploring "
-        "with precision and adapt your understanding as you uncover more insights about testable behaviors."
+        "Describe what to analyze for test generation. Step 1: State test goals and approach. "
+        "Consider code structure, business logic, edge cases, failure modes. Map functionality, identify test areas. "
+        "Later steps: explore with precision, adapt understanding."
     ),
-    "step_number": (
-        "The index of the current step in the test generation sequence, beginning at 1. Each step should build upon or "
-        "revise the previous one."
-    ),
-    "total_steps": (
-        "Your current estimate for how many steps will be needed to complete the test generation analysis. "
-        "Adjust as new findings emerge."
-    ),
-    "next_step_required": (
-        "Set to true if you plan to continue the investigation with another step. False means you believe the "
-        "test generation analysis is complete and ready for expert validation."
-    ),
+    "step_number": "Current step index, starting at 1. Each step builds on previous.",
+    "total_steps": "Estimated steps to complete test generation analysis. Adjust as needed.",
+    "next_step_required": "True to continue investigation, False when test generation analysis complete.",
     "findings": (
-        "Summarize everything discovered in this step about the code being tested. Include analysis of functionality, "
-        "critical paths, edge cases, boundary conditions, error handling, async behavior, state management, and "
-        "integration points. Be specific and avoid vague language—document what you now know about the code and "
-        "what test scenarios are needed. IMPORTANT: Document both the happy paths and potential failure modes. "
-        "Identify existing test patterns if examples were provided. In later steps, confirm or update past findings "
-        "with additional evidence."
+        "Summarize test generation discoveries: functionality, critical paths, edge cases, error handling, test scenarios. "
+        "Document happy paths and failure modes. Be specific, update in later steps."
     ),
-    "files_checked": (
-        "List all files (as absolute paths, do not clip or shrink file names) examined during the test generation "
-        "investigation so far. Include even files ruled out or found to be unrelated, as this tracks your "
-        "exploration path."
-    ),
+    "files_checked": "All files examined during test generation investigation. Use full absolute paths, do not shorten.",
     "relevant_files": (
-        "Subset of files_checked (as full absolute paths) that contain code directly needing tests or are essential "
-        "for understanding test requirements. Only list those that are directly tied to the functionality being tested. "
-        "This could include implementation files, interfaces, dependencies, or existing test examples."
+        "Files needing tests or essential for test requirements. Use full absolute paths, do not shorten."
     ),
     "relevant_context": (
         "List methods, functions, classes, or modules that need test coverage, in the format "
@@ -77,12 +56,8 @@ TESTGEN_WORKFLOW_FIELD_DESCRIPTIONS = {
         "public APIs, complex algorithms, and error-prone code paths."
     ),
     "confidence": (
-        "Indicate your current confidence in the test generation assessment. Use: 'exploring' (starting analysis), "
-        "'low' (early investigation), 'medium' (some patterns identified), 'high' (strong understanding), "
-        "'very_high' (very strong understanding), 'almost_certain' (nearly complete test plan), 'certain' "
-        "(100% confidence - test plan is thoroughly complete and all test scenarios are identified with no need for external model validation). "
-        "Do NOT use 'certain' unless the test generation analysis is comprehensively complete, use 'very_high' or 'almost_certain' instead if not 100% sure. "
-        "Using 'certain' means you have complete confidence locally and prevents external model validation."
+        "Test generation confidence: 'exploring' (starting), 'low' (early), 'medium' (some patterns), "
+        "'high' (strong understanding), 'very_high', 'almost_certain', 'certain' (complete test plan)."
     ),
     "backtrack_from_step": (
         "If an earlier finding or assessment needs to be revised or discarded, specify the step number from which to "
